@@ -1,1 +1,4 @@
 logs
+Villas/test_with_docker_compose/compose_debug.yaml
+*.log
+Villas/test_with_docker_compose/LabA/Dockerfile_signal

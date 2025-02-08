@@ -1,0 +1,57 @@
+services:
+  villas_lab_a:
+    image: villas_node_lab_a
+    environment:
+      TASK: "VILLAS_LAB_A"
+      ITERATIONS: 100000
+    build:
+      context: ./LabA
+      dockerfile: Dockerfile
+    ports:
+      - "12001:12001/udp"
+    volumes:
+      - ./LabA:/configs
+    container_name: realtime_villas_lab_a
+    tty: true
+    cap_add:
+      - SYS_NICE
+    ulimits:
+      rtprio: 99
+      rttime: -1
+      memlock: 8428281856
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 200M
+        reservations:
+          cpus: '0.2'
+          memory: 100M
+  villas_lab_b:
+    image: villas_node_lab_b
+    environment:
+      TASK: "VILLAS_LAB_B"
+      ITERATIONS: 100000
+    build:
+      context: ./LabB
+      dockerfile: Dockerfile
+    ports:
+      - "12002:12002/udp"
+    volumes:
+      - ./LabB:/configs
+    container_name: realtime_villas_lab_b
+    tty: true
+    cap_add:
+      - SYS_NICE
+    ulimits:
+      rtprio: 99
+      rttime: -1
+      memlock: 8428281856
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 200M
+        reservations:
+          cpus: '0.2'
+          memory: 100M
