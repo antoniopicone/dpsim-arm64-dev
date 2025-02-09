@@ -1,6 +1,47 @@
 services:
+
+
+  dpsim_lab_a:
+    image: python:3.9
+    volumes:
+      - .:/app
+    working_dir: /app
+    container_name: dpsim_lab_a
+    tty: true
+    command: python dpsim_lab_mock.py
+    networks:
+      - dpsim_network
+    depends_on:
+      - villas_lab_a
+    environment:
+      - HOST_DEST=villas_lab_a
+      - HOST_SOURCE=0.0.0.0
+      - PORT_DEST=12001
+      - PORT_SOURCE=12000
+      - SAMPLE_RATE_MILLIS=1000
+
+  dpsim_lab_b:
+    image: python:3.9
+    volumes:
+      - .:/app
+    working_dir: /app
+    container_name: dpsim_lab_b
+    tty: true
+    command: python dpsim_lab_mock.py
+    networks:
+      - dpsim_network
+    depends_on:
+      - villas_lab_b
+    environment:
+      - HOST_DEST=villas_lab_b
+      - HOST_SOURCE=0.0.0.0
+      - PORT_DEST=12002
+      - PORT_SOURCE=12003
+      - SAMPLE_RATE_MILLIS=1000
+
+
   villas_lab_a:
-    image: villas_node_lab
+    #image: villas_node_lab
     environment:
       TASK: "VILLAS_LAB_A"
       ITERATIONS: 100000
@@ -9,7 +50,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "12000:12000/udp"
-      - "12001:12001/udp"
+      #- "12001:12001/udp"
     volumes:
       - ./LabA:/configs
     container_name: realtime_villas_lab_a
@@ -28,8 +69,11 @@ services:
         reservations:
           cpus: '0.2'
           memory: 100M
+    networks:
+      - dpsim_network
+
   villas_lab_b:
-    image: villas_node_lab
+    #image: villas_node_lab
     environment:
       TASK: "VILLAS_LAB_B"
       ITERATIONS: 100000
@@ -37,7 +81,7 @@ services:
       context: ./LabB
       dockerfile: Dockerfile
     ports:
-      - "12002:12002/udp"
+      #- "12002:12002/udp"
       - "12003:12003/udp"
     volumes:
       - ./LabB:/configs
@@ -57,3 +101,9 @@ services:
         reservations:
           cpus: '0.2'
           memory: 100M
+    networks:
+      - dpsim_network
+
+networks:
+  dpsim_network:
+    driver: bridge
