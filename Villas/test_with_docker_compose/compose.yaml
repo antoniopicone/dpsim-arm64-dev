@@ -5,10 +5,11 @@ services:
     image: python:3.9
     volumes:
       - .:/app
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
     working_dir: /app
     container_name: dpsim_lab_a
     tty: true
-    command: python dpsim_lab_mock.py
+    command: python vanilla_circuit_sim.py
     networks:
       - dpsim_network
     depends_on:
@@ -18,7 +19,22 @@ services:
       - HOST_SOURCE=0.0.0.0
       - PORT_DEST=12001
       - PORT_SOURCE=12000
-      - SAMPLE_RATE_MILLIS=1000
+      - SAMPLE_FREQUENCY=1
+      - PYTHONUNBUFFERED=1
+    
+    privileged: true
+    cap_add:
+      - SYS_NICE       # Necessario per lo scheduling real-time
+      - IPC_LOCK       # Opzionale per memoria locking
+    security_opt:
+      - seccomp:unconfined
+    #deploy:
+      #resources:
+        #cpu_rt_period: 1000000
+        #cpu_rt_runtime: 950000
+    devices:
+      - "/dev/pts:/dev/pts"
+      
 
   dpsim_lab_b:
     image: python:3.9
