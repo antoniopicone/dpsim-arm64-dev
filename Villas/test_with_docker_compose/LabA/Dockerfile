@@ -1,6 +1,6 @@
 FROM registry.git.rwth-aachen.de/acs/public/villas/node
 
-WORKDIR  /configs
+WORKDIR /configs
 
 ENTRYPOINT [ "sh" ]
 

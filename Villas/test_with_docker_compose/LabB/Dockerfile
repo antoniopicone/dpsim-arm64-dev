@@ -4,4 +4,4 @@ WORKDIR /configs
 
 ENTRYPOINT [ "sh" ]
 
-CMD ["-c","villas-node ./path.conf"]
+CMD ["-c","villas-node /configs/path.conf"]
