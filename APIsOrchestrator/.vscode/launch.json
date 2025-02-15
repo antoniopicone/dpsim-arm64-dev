@@ -11,7 +11,8 @@
             "request": "launch",
             "preLaunchTask": "build",
             // Se i framework di destinazione sono stati modificati, assicurarsi di aggiornare il percorso del programma.
-            "program": "${workspaceFolder}/ApiProject/bin/Debug/net6.0/ApiProject.dll",
+            //"program": "${workspaceFolder}/ApiProject/bin/Debug/net6.0/ApiProject.dll",
+            "program": "${workspaceFolder}/ApiProject/bin/Debug/net8.0/ApiProject.dll",
             "args": [],
             "cwd": "${workspaceFolder}/ApiProject",
             "stopAtEntry": false,
@@ -38,7 +39,8 @@
             "request": "launch",
             "preLaunchTask": "build",
             // Se i framework di destinazione sono stati modificati, assicurarsi di aggiornare il percorso del programma.
-            "program": "${workspaceFolder}/ApiProject/bin/Debug/net6.0/ApiProject.dll",
+            //"program": "${workspaceFolder}/ApiProject/bin/Debug/net6.0/ApiProject.dll",
+            "program": "${workspaceFolder}/ApiProject/bin/Debug/net8.0/ApiProject.dll",
             "args": [],
             "cwd": "${workspaceFolder}/ApiProject",
             "stopAtEntry": false,
