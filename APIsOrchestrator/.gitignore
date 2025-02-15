@@ -8,10 +8,10 @@
 *.sln.docstates
 .DS_Store
 Token.git
-RockApi/docker/api
-RockApi/logs
-RockApi/Properties/PublishProfiles
-RockApi/appsettings.json
+ApiProject/docker/api
+ApiProject/logs
+ApiProject/Properties/PublishProfiles
+RocApiProjectkApi/appsettings.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
