@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="simpleinjector" Version="5.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CQRS\CQRS.csproj" />
+    <ProjectReference Include="..\Logging\Logging.csproj" />
+    <ProjectReference Include="..\Persintence.EF\Persistence.EF.csproj" />
+    <ProjectReference Include="..\EventDriven\Mqtt\Mqtt.csproj" />
+    <ProjectReference Include="..\Mqtt\Mqtt.csproj" />
+  </ItemGroup>
+</Project>
