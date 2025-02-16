@@ -4,6 +4,6 @@ Villas/test_with_docker_compose/compose_debug.yaml
 *.log
 Villas/test_with_docker_compose/LabA/Dockerfile_signal
 *.pyc
-__pycache__
 .DS_Store
 APIsOrchestrator/ApiProject/appsettings.Development.json
+__pycache__
