@@ -11,7 +11,7 @@ HOST_DEST = os.getenv('HOST_DEST', 'villas_lab_a')
 HOST_SOURCE = os.getenv('HOST_SOURCE', '0.0.0.0')
 PORT_DEST = int(os.getenv('PORT_DEST', '12001'))
 PORT_SOURCE = int(os.getenv('PORT_SOURCE', '12000'))
-TIME_STEP_MILLIS = int(os.getenv('SAMPLE_FREQUENCY', '1'))
+TIME_STEP_MILLIS = int(os.getenv('TIME_STEP_MILLIS', '1'))
 
 def start_simulation(voltage_phasor):
     

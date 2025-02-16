@@ -19,7 +19,7 @@ services:
       - HOST_SOURCE=0.0.0.0
       - PORT_DEST=12001
       - PORT_SOURCE=12000
-      - TIME_STEP_MILLIS=1
+      - TIME_STEP_MILLIS=10
       - PYTHONUNBUFFERED=1
     
     privileged: true
@@ -54,7 +54,7 @@ services:
       - HOST_SOURCE=0.0.0.0
       - PORT_DEST=12002
       - PORT_SOURCE=12003
-      - TIME_STEP_MILLIS=1
+      - TIME_STEP_MILLIS=10
       - PYTHONUNBUFFERED=1
       - BOOTSTRAP_VOLTAGE_REAL=120.0
       - BOOTSTRAP_VOLTAGE_IMAG=0

@@ -10,7 +10,7 @@ HOST_DEST = os.getenv('HOST_DEST', 'villas_lab_b')
 HOST_SOURCE = os.getenv('HOST_SOURCE', '0.0.0.0')
 PORT_DEST = int(os.getenv('PORT_DEST', '12002'))
 PORT_SOURCE = int(os.getenv('PORT_SOURCE', '12003'))
-TIME_STEP_MILLIS = int(os.getenv('SAMPLE_FREQUENCY', '1'))
+TIME_STEP_MILLIS = int(os.getenv('TIME_STEP_MILLIS', '1'))
 # Tensione di bootstrap
 BOOTSTRAP_VOLTAGE_REAL = float(os.getenv('BOOTSTRAP_VOLTAGE_REAL', '120.0'))
 BOOTSTRAP_VOLTAGE_IMAG = float(os.getenv('BOOTSTRAP_VOLTAGE_IMAG', '0.0'))
