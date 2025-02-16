@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'RockApi' " />
+  <ItemGroup>
+    <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc" Version="5.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    <PackageReference Include="NReJSON" Version="4.0.0" />
+    <PackageReference Include="Quartz.AspNetCore" Version="3.6.2" />
+    <PackageReference Include="Quartz" Version="3.13.1" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.13.1" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.13.1" />
+    <PackageReference Include="MQTTnet" Version="4.3.3.952" />
+    <PackageReference Include="MQTTnet.AspNetCore" Version="4.3.3.952" />
+    <PackageReference Include="FftSharp" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CompositionRoot\CompositionRoot.csproj" />
+    <ProjectReference Include="..\CQRS\CQRS.csproj" />
+    <ProjectReference Include="..\DomainModel\DomainModel.csproj" />
+    <ProjectReference Include="..\Logging\Logging.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <None Remove="Microsoft.Extensions.Logging.Debug" />
+    <None Remove="Microsoft.VisualStudio.Web.CodeGeneration.Design" />
+    <None Remove="Microsoft.EntityFrameworkCore.SqlServer" />
+    <None Remove="logs\" />
+    <None Remove="Swashbuckle.AspNetCore" />
+    <None Remove="StackExchange.Redis" />
+    <None Remove="NReJSON" />
+    <None Remove="Quartz.AspNetCore" />
+    <None Remove="Quartz" />
+    <None Remove="Quartz.Extensions.Hosting" />
+    <None Remove="Quartz.Extensions.DependencyInjection" />
+    <None Remove="Services\" />
+    <None Remove="Extensions\" />
+    <None Remove="Settings\" />
+    <None Remove="Job\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="docker\api\appsettings.json" />
+    <Content Remove="docker\api\RockApi.deps.json" />
+    <Content Remove="docker\api\appsettings.Development.json" />
+    <Content Remove="docker\api\RockApi.runtimeconfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="logs/" />
+    <Folder Include="logs\" />
+    <Folder Include="Services\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Settings\" />
+    <Folder Include="Job\" />
+  </ItemGroup>
+</Project>

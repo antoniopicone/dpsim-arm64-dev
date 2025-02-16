@@ -1,0 +1,61 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+            {
+            // Usare IntelliSense per individuare gli attributi esistenti per il debug C#
+            // Usa il passaggio del mouse per la descrizione degli attributi esistenti
+            // Per ulteriori informazioni, visitare https://github.com/dotnet/vscode-csharp/blob/main/debugger-launchjson.md.
+            "name": "ApiProjectDebug",
+            "launchSettingsProfile": "ApiProjectDebug",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // Se i framework di destinazione sono stati modificati, assicurarsi di aggiornare il percorso del programma.
+            //"program": "${workspaceFolder}/ApiProject/bin/Debug/net6.0/ApiProject.dll",
+            "program": "${workspaceFolder}/ApiProject/bin/Debug/net8.0/ApiProject.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/ApiProject",
+            "stopAtEntry": false,
+            // Abilita l'avvio di un Web browser all'avvio di ASP.NET Core. Per ulteriori informazioni: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "http://localhost:8080/api/values"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            // Usare IntelliSense per individuare gli attributi esistenti per il debug C#
+            // Usa il passaggio del mouse per la descrizione degli attributi esistenti
+            // Per ulteriori informazioni, visitare https://github.com/dotnet/vscode-csharp/blob/main/debugger-launchjson.md.
+            "name": "ApiProject",
+            "launchSettingsProfile": "ApiProject",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // Se i framework di destinazione sono stati modificati, assicurarsi di aggiornare il percorso del programma.
+            //"program": "${workspaceFolder}/ApiProject/bin/Debug/net6.0/ApiProject.dll",
+            "program": "${workspaceFolder}/ApiProject/bin/Debug/net8.0/ApiProject.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/ApiProject",
+            "stopAtEntry": false,
+            // Abilita l'avvio di un Web browser all'avvio di ASP.NET Core. Per ulteriori informazioni: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "http://localhost:8080/api/values"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Test"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        }
+    ]
+}
