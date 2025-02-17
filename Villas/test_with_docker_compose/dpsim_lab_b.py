@@ -10,14 +10,14 @@ HOST_DEST = os.getenv('HOST_DEST', 'villas_lab_b')
 HOST_SOURCE = os.getenv('HOST_SOURCE', '0.0.0.0')
 PORT_DEST = int(os.getenv('PORT_DEST', '12002'))
 PORT_SOURCE = int(os.getenv('PORT_SOURCE', '12003'))
-TIME_STEP_MILLIS = int(os.getenv('SAMPLE_FREQUENCY', '1'))
+TIME_STEP_MILLIS = int(os.getenv('TIME_STEP_MILLIS', '1'))
 # Tensione di bootstrap
 BOOTSTRAP_VOLTAGE_REAL = float(os.getenv('BOOTSTRAP_VOLTAGE_REAL', '120.0'))
 BOOTSTRAP_VOLTAGE_IMAG = float(os.getenv('BOOTSTRAP_VOLTAGE_IMAG', '0.0'))
 
-def send_bootstrap_voltage():
+def send_bootstrap_voltage(sequence):
     payload = [{
-        "sequence": 111,
+        "sequence": sequence,
         "data": [{
             "real": BOOTSTRAP_VOLTAGE_REAL,
             "imag": BOOTSTRAP_VOLTAGE_IMAG
@@ -28,7 +28,7 @@ def send_bootstrap_voltage():
     sock_tx.sendto(json.dumps(payload).encode(), (HOST_DEST, PORT_DEST))
     print(f"Sent bootstrap voltage to {HOST_DEST}: {payload}")
 
-def start_simulation(current_phasor):
+def start_simulation(current_phasor,sequence):
     name = 'VILLAS_test'
     
     # Nodes
@@ -72,7 +72,7 @@ def start_simulation(current_phasor):
     imag_part = v_out.imag
     
     payload = [{
-        "sequence": 111,
+        "sequence": sequence,
         "data": [{
             "real": real_part,
             "imag": imag_part
@@ -87,15 +87,18 @@ def start_simulation(current_phasor):
 def udp_receiver():
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((HOST_SOURCE, PORT_SOURCE))
-    sock.settimeout(1.0)  # Timeout di 1 secondo per il polling
+    _time_step = TIME_STEP_MILLIS/1000
+    sock.settimeout(_time_step)  # Timeout di 1 secondo per il polling
     
     first_value_received = False
-    
+    sequence = 0
     while True:
         try:
+            sequence=sequence+1
+            
             if not first_value_received:
                 # Invia tensione di bootstrap
-                send_bootstrap_voltage()
+                send_bootstrap_voltage(sequence)
                 print("Waiting for first current value...")
             
             # Prova a ricevere dati
@@ -107,9 +110,9 @@ def udp_receiver():
             
             # Imposta il flag dopo aver ricevuto il primo valore
             first_value_received = True
-            
+
             # Esegui la simulazione con il valore ricevuto
-            start_simulation(complex(i_real, i_imag))
+            start_simulation(complex(i_real, i_imag),sequence)
             
         except socket.timeout:
             # Se non abbiamo ancora ricevuto il primo valore, continua il bootstrap

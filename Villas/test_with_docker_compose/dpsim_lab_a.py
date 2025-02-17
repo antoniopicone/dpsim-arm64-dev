@@ -11,9 +11,9 @@ HOST_DEST = os.getenv('HOST_DEST', 'villas_lab_a')
 HOST_SOURCE = os.getenv('HOST_SOURCE', '0.0.0.0')
 PORT_DEST = int(os.getenv('PORT_DEST', '12001'))
 PORT_SOURCE = int(os.getenv('PORT_SOURCE', '12000'))
-TIME_STEP_MILLIS = int(os.getenv('SAMPLE_FREQUENCY', '1'))
+TIME_STEP_MILLIS = int(os.getenv('TIME_STEP_MILLIS', '1'))
 
-def start_simulation(voltage_phasor):
+def start_simulation(voltage_phasor,sequence):
     
     name = 'VILLAS_test'
     
@@ -55,7 +55,7 @@ def start_simulation(voltage_phasor):
     real_part = i_out.get()[0, 0].real  # Parte reale
     imag_part = i_out.get()[0, 0].imag  # Parte immaginaria
     payload = [{
-                "sequence": 111,
+                "sequence": sequence,
                 "data": [{
                     "real": real_part,
                     "imag": imag_part
@@ -70,16 +70,17 @@ def start_simulation(voltage_phasor):
 def udp_receiver():
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((HOST_SOURCE, PORT_SOURCE))
-    
+    sequence=0
     while True:
         try:
+            sequence=sequence+1
             data, _ = sock.recvfrom(1024)
             vs = json.loads(data.decode())
             print(vs)
             v_real = vs[0]['data'][0]['real']
             v_imag = vs[0]['data'][0]['imag']
             print(f"Received from {HOST_DEST}: {vs}")
-            start_simulation(complex(v_real,v_imag))
+            start_simulation(complex(v_real,v_imag),sequence)
             
         except (json.JSONDecodeError, KeyError, ValueError) as e:
             print(f"Errore nel parsing JSON: {str(e)}")
