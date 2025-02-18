@@ -88,7 +88,7 @@ def udp_receiver():
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((HOST_SOURCE, PORT_SOURCE))
     _time_step = TIME_STEP_MILLIS/1000
-    sock.settimeout(_time_step)  # Timeout di 1 secondo per il polling
+    sock.settimeout(_time_step*2)  # Timeout di 1 secondo per il polling
     
     first_value_received = False
     sequence = 0
