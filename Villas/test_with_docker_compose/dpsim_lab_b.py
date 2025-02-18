@@ -66,7 +66,7 @@ def start_simulation(current_phasor,sequence):
     sim.next()
     
     # Lettura tensione ai capi del resistore
-    v_out = n1.get_voltage()
+    v_out = n1.attr("v")
     
     real_part = v_out.real
     imag_part = v_out.imag
