@@ -4,6 +4,7 @@ import json
 import math
 import os
 import dpsimpy
+import time as time_module
 
 
 # Configurazione
@@ -12,11 +13,14 @@ HOST_SOURCE = os.getenv('HOST_SOURCE', '0.0.0.0')
 PORT_DEST = int(os.getenv('PORT_DEST', '12001'))
 PORT_SOURCE = int(os.getenv('PORT_SOURCE', '12000'))
 TIME_STEP_MILLIS = int(os.getenv('TIME_STEP_MILLIS', '1'))
+TAU_MILLIS = int(os.getenv('TAU_MILLIS', '1'))
 
 def start_simulation(voltage_phasor,sequence):
-    
+
     name = 'VILLAS_test'
     
+    inizio = time_module.perf_counter()
+
     # Nodes
     gnd = dpsimpy.dp.SimNode.gnd
     n1 =  dpsimpy.dp.SimNode('n1')
@@ -61,10 +65,17 @@ def start_simulation(voltage_phasor,sequence):
                     "imag": imag_part
                 }]
             }]
+
+    fine = time_module.perf_counter()
+    tempo_esecuzione = (fine - inizio)
     
+    if tempo_esecuzione < _time_step:
+        print(f"Risolto in  receiver: {str(tempo_esecuzione - _time_step)} sec")
+        time_module.sleep(TAU_MILLIS/1000 - _time_step)
+
+    # Invio risultato
     sock_tx = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock_tx.sendto(json.dumps(payload).encode(), (HOST_DEST, PORT_DEST))
-            
     print(f"Sent current to {HOST_DEST}: {payload}")
     
 def udp_receiver():
@@ -94,5 +105,6 @@ def setup_realtime_scheduling():
     print(f"Scheduling configurato: {os.sched_getscheduler(0)}")
 
 if __name__ == "__main__":
+    time_module.sleep(2)
     setup_realtime_scheduling()
     udp_receiver()
