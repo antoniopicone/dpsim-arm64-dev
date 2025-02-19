@@ -66,17 +66,17 @@ def start_simulation(voltage_phasor,sequence):
                 }]
             }]
 
-    fine = time_module.perf_counter()
-    tempo_esecuzione = (fine - inizio)
-    
-    if tempo_esecuzione < _time_step:
-        print(f"Risolto in  receiver: {str(tempo_esecuzione - _time_step)} sec")
-        time_module.sleep(TAU_MILLIS/1000 - _time_step)
-
     # Invio risultato
     sock_tx = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock_tx.sendto(json.dumps(payload).encode(), (HOST_DEST, PORT_DEST))
     print(f"Sent current to {HOST_DEST}: {payload}")
+
+    fine = time_module.perf_counter()
+    tempo_esecuzione = fine - inizio
+    
+    if tempo_esecuzione <= (_time_step*1000):
+        print(f"Risolto LAB A in: {str(tempo_esecuzione*1000)} msec")
+        time_module.sleep((TAU_MILLIS - TIME_STEP_MILLIS)/1000)
     
 def udp_receiver():
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
