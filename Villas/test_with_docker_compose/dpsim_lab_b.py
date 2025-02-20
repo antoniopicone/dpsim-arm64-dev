@@ -68,12 +68,13 @@ def start_simulation(current_phasor,sequence):
     # Esecuzione simulazione
     sim.start()
     sim.next()
-    
+    sequence=sequence+1
+            
     # Lettura tensione ai capi del resistore
     v_out = n1.attr("v")
     
-    real_part = v_out.real
-    imag_part = v_out.imag
+    real_part = v_out.get()[0, 0].real
+    imag_part = v_out.get()[0, 0].real
     
     payload = [{
         "sequence": sequence,
@@ -105,7 +106,6 @@ def udp_receiver():
     sequence = 0
     while True:
         try:
-            sequence=sequence+1
             
             if not first_value_received:
                 # Invia tensione di bootstrap
@@ -117,6 +117,7 @@ def udp_receiver():
             cs = json.loads(data.decode())
             i_real = cs[0]['data'][0]['real']
             i_imag = cs[0]['data'][0]['imag']
+            sequence = cs[0]['sequence']
             print(f"Received from {HOST_DEST}: {cs}")
             
             # Imposta il flag dopo aver ricevuto il primo valore

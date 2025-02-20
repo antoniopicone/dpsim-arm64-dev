@@ -54,6 +54,8 @@ def start_simulation(voltage_phasor,sequence):
     sim.set_final_time(_time_step) # eseguiamo una sola iterazione, quindi coincidente con il time step
     sim.start()
     sim.next()
+    sequence=sequence+1
+            
     i_out = l1.attr("i_intf") 
     
     real_part = i_out.get()[0, 0].real  # Parte reale
@@ -84,12 +86,13 @@ def udp_receiver():
     sequence=0
     while True:
         try:
-            sequence=sequence+1
             data, _ = sock.recvfrom(1024)
             vs = json.loads(data.decode())
             print(vs)
             v_real = vs[0]['data'][0]['real']
             v_imag = vs[0]['data'][0]['imag']
+            sequence = vs[0]['sequence']
+            
             print(f"Received from {HOST_DEST}: {vs}")
             start_simulation(complex(v_real,v_imag),sequence)
             
