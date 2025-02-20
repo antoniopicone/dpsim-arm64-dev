@@ -2,7 +2,7 @@ import socket
 import json
 import math
 import os
-import time
+import time as time_module
 import dpsimpy
 
 # Configurazione
@@ -11,6 +11,7 @@ HOST_SOURCE = os.getenv('HOST_SOURCE', '0.0.0.0')
 PORT_DEST = int(os.getenv('PORT_DEST', '12002'))
 PORT_SOURCE = int(os.getenv('PORT_SOURCE', '12003'))
 TIME_STEP_MILLIS = int(os.getenv('TIME_STEP_MILLIS', '1'))
+TAU_MILLIS = int(os.getenv('TAU_MILLIS', '1'))
 # Tensione di bootstrap
 BOOTSTRAP_VOLTAGE_REAL = float(os.getenv('BOOTSTRAP_VOLTAGE_REAL', '120.0'))
 BOOTSTRAP_VOLTAGE_IMAG = float(os.getenv('BOOTSTRAP_VOLTAGE_IMAG', '0.0'))
@@ -29,8 +30,11 @@ def send_bootstrap_voltage(sequence):
     print(f"Sent bootstrap voltage to {HOST_DEST}: {payload}")
 
 def start_simulation(current_phasor,sequence):
+    
     name = 'VILLAS_test'
     
+    inizio = time_module.perf_counter()
+
     # Nodes
     gnd = dpsimpy.dp.SimNode.gnd
     n1 = dpsimpy.dp.SimNode('n1')
@@ -64,12 +68,13 @@ def start_simulation(current_phasor,sequence):
     # Esecuzione simulazione
     sim.start()
     sim.next()
-    
+    sequence=sequence+1
+            
     # Lettura tensione ai capi del resistore
     v_out = n1.attr("v")
     
-    real_part = v_out.real
-    imag_part = v_out.imag
+    real_part = v_out.get()[0, 0].real
+    imag_part = v_out.get()[0, 0].real
     
     payload = [{
         "sequence": sequence,
@@ -84,17 +89,23 @@ def start_simulation(current_phasor,sequence):
     sock_tx.sendto(json.dumps(payload).encode(), (HOST_DEST, PORT_DEST))
     print(f"Sent voltage to {HOST_DEST}: {payload}")
 
+    fine = time_module.perf_counter()
+    tempo_esecuzione = fine - inizio
+    
+    if tempo_esecuzione <= (_time_step*1000):
+        print(f"Risolto LAB B in: {str(tempo_esecuzione*1000)} msec")
+        time_module.sleep((TAU_MILLIS - TIME_STEP_MILLIS)/1000)
+
 def udp_receiver():
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((HOST_SOURCE, PORT_SOURCE))
     _time_step = TIME_STEP_MILLIS/1000
-    sock.settimeout(_time_step)  # Timeout di 1 secondo per il polling
+    sock.settimeout(TAU_MILLIS/1000)  # Timeout di TAU_MILLIS sec per il polling
     
     first_value_received = False
     sequence = 0
     while True:
         try:
-            sequence=sequence+1
             
             if not first_value_received:
                 # Invia tensione di bootstrap
@@ -106,6 +117,7 @@ def udp_receiver():
             cs = json.loads(data.decode())
             i_real = cs[0]['data'][0]['real']
             i_imag = cs[0]['data'][0]['imag']
+            sequence = cs[0]['sequence']
             print(f"Received from {HOST_DEST}: {cs}")
             
             # Imposta il flag dopo aver ricevuto il primo valore
@@ -133,6 +145,7 @@ def setup_realtime_scheduling():
     print(f"Scheduling configurato: {os.sched_getscheduler(0)}")
 
 if __name__ == "__main__":
+    time_module.sleep(2)
     setup_realtime_scheduling()
     udp_receiver()
     

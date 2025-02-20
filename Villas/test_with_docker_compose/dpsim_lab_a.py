@@ -4,6 +4,7 @@ import json
 import math
 import os
 import dpsimpy
+import time as time_module
 
 
 # Configurazione
@@ -12,11 +13,14 @@ HOST_SOURCE = os.getenv('HOST_SOURCE', '0.0.0.0')
 PORT_DEST = int(os.getenv('PORT_DEST', '12001'))
 PORT_SOURCE = int(os.getenv('PORT_SOURCE', '12000'))
 TIME_STEP_MILLIS = int(os.getenv('TIME_STEP_MILLIS', '1'))
+TAU_MILLIS = int(os.getenv('TAU_MILLIS', '1'))
 
 def start_simulation(voltage_phasor,sequence):
-    
+
     name = 'VILLAS_test'
     
+    inizio = time_module.perf_counter()
+
     # Nodes
     gnd = dpsimpy.dp.SimNode.gnd
     n1 =  dpsimpy.dp.SimNode('n1')
@@ -50,6 +54,8 @@ def start_simulation(voltage_phasor,sequence):
     sim.set_final_time(_time_step) # eseguiamo una sola iterazione, quindi coincidente con il time step
     sim.start()
     sim.next()
+    sequence=sequence+1
+            
     i_out = l1.attr("i_intf") 
     
     real_part = i_out.get()[0, 0].real  # Parte reale
@@ -61,11 +67,18 @@ def start_simulation(voltage_phasor,sequence):
                     "imag": imag_part
                 }]
             }]
-    
+
+    # Invio risultato
     sock_tx = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock_tx.sendto(json.dumps(payload).encode(), (HOST_DEST, PORT_DEST))
-            
     print(f"Sent current to {HOST_DEST}: {payload}")
+
+    fine = time_module.perf_counter()
+    tempo_esecuzione = fine - inizio
+    
+    if tempo_esecuzione <= (_time_step*1000):
+        print(f"Risolto LAB A in: {str(tempo_esecuzione*1000)} msec")
+        time_module.sleep((TAU_MILLIS - TIME_STEP_MILLIS)/1000)
     
 def udp_receiver():
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -73,12 +86,13 @@ def udp_receiver():
     sequence=0
     while True:
         try:
-            sequence=sequence+1
             data, _ = sock.recvfrom(1024)
             vs = json.loads(data.decode())
             print(vs)
             v_real = vs[0]['data'][0]['real']
             v_imag = vs[0]['data'][0]['imag']
+            sequence = vs[0]['sequence']
+            
             print(f"Received from {HOST_DEST}: {vs}")
             start_simulation(complex(v_real,v_imag),sequence)
             
@@ -94,5 +108,6 @@ def setup_realtime_scheduling():
     print(f"Scheduling configurato: {os.sched_getscheduler(0)}")
 
 if __name__ == "__main__":
+    time_module.sleep(2)
     setup_realtime_scheduling()
     udp_receiver()

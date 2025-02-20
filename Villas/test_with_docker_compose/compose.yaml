@@ -12,14 +12,15 @@ services:
     command: /usr/bin/python3 dpsim_lab_a.py
     networks:
       - dpsim_network
-    depends_on:
-      - villas_lab_a
+    #depends_on:
+    #  - villas_lab_a
     environment:
       - HOST_DEST=villas_lab_a
       - HOST_SOURCE=0.0.0.0
       - PORT_DEST=12001
       - PORT_SOURCE=12000
       - TIME_STEP_MILLIS=10
+      - TAU_MILLIS=1000
       - PYTHONUNBUFFERED=1
     
     privileged: true
@@ -47,14 +48,15 @@ services:
     command: /usr/bin/python3 dpsim_lab_b.py
     networks:
       - dpsim_network
-    depends_on:
-      - villas_lab_b
+    #depends_on:
+    #  - villas_lab_b
     environment:
       - HOST_DEST=villas_lab_b
       - HOST_SOURCE=0.0.0.0
       - PORT_DEST=12002
       - PORT_SOURCE=12003
       - TIME_STEP_MILLIS=10
+      - TAU_MILLIS=1000
       - PYTHONUNBUFFERED=1
       - BOOTSTRAP_VOLTAGE_REAL=120.0
       - BOOTSTRAP_VOLTAGE_IMAG=0
@@ -86,6 +88,7 @@ services:
       #- "12001:12001/udp"
     volumes:
       - ./LabA:/configs
+      - ./LabA/Logs:/configs/Logs
     container_name: realtime_villas_lab_a
     tty: true
     cap_add:
@@ -118,6 +121,7 @@ services:
       #- "12003:12003/udp"
     volumes:
       - ./LabB:/configs
+      - ./LabB/Logs:/configs/Logs
     container_name: realtime_villas_lab_b
     tty: true
     cap_add:
