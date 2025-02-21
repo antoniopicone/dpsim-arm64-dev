@@ -31,7 +31,7 @@ def send_bootstrap_voltage(sequence):
     sock_tx.sendto(json.dumps(payload).encode(), (HOST_DEST, PORT_DEST))
     #print(f"Sent bootstrap voltage to {HOST_DEST}: {payload}")
 
-def start_simulation(current_phasor,voltage_step_prec,sequence):
+def start_simulation():
     
     name = 'VILLAS_test'
     
@@ -43,17 +43,13 @@ def start_simulation(current_phasor,voltage_step_prec,sequence):
     
     # Components
     cs = dpsimpy.dp.ph1.CurrentSource('cs')
-    cs.set_parameters(I_ref=current_phasor)
-    #print(f"Applying current {str(current_phasor)}")
+    cs.set_parameters(I_ref=complex(0,0))
     
     r1 = dpsimpy.dp.ph1.Resistor('r1')
-    if ((sequence < 100) or (sequence > 500) ) :
-        r1.set_parameters(R=10)
-    else:
-        r1.set_parameters(R=1)
+    r1.set_parameters(R=10)
 
     # Inizializzazione tensioni dei nodi
-    n1.set_initial_voltage(voltage_step_prec)
+    n1.set_initial_voltage(complex(0,0))
     
     # Connessione componenti
     cs.connect([gnd, n1])
@@ -68,10 +64,24 @@ def start_simulation(current_phasor,voltage_step_prec,sequence):
     sim.set_system(system)
     _time_step = TIME_STEP_MILLIS/1000
     sim.set_time_step(_time_step)
-    sim.set_final_time(_time_step)
+    sim.set_final_time(_time_step*1000)
     
     # Esecuzione simulazione
     sim.start()
+
+    return sim,cs,n1,r1
+
+def next_simulation(sim,cs,n1,r1,current_phasor,sequence,time_step):
+    
+    inizio = time_module.perf_counter()
+
+    cs.set_parameters(I_ref=current_phasor)
+
+    if ((sequence < 100) or (sequence > 500) ) :
+        r1.set_parameters(R=10)
+    else:
+        r1.set_parameters(R=1)
+
     sim.next()
     sequence=sequence+1
             
@@ -97,13 +107,13 @@ def start_simulation(current_phasor,voltage_step_prec,sequence):
     fine = time_module.perf_counter()
     tempo_esecuzione = fine - inizio
     
-    if tempo_esecuzione <= (_time_step*1000):
+    if tempo_esecuzione <= (time_step*1000):
         print(f"Risolto LAB B in: {str(tempo_esecuzione*1000)} msec")
         time_module.sleep((TAU_MILLIS - TIME_STEP_MILLIS)/1000)
     
     return complex(real_part,imag_part)
 
-def udp_receiver():
+def udp_receiver(sim,cs,n1,r1):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((HOST_SOURCE, PORT_SOURCE))
     _time_step = TIME_STEP_MILLIS/1000
@@ -112,7 +122,7 @@ def udp_receiver():
     
     first_value_received = False
     sequence = 0
-    v_prec = complex(BOOTSTRAP_VOLTAGE_REAL,BOOTSTRAP_VOLTAGE_IMAG)
+    time_step = TIME_STEP_MILLIS/1000
     while True:
         try:
             
@@ -123,17 +133,17 @@ def udp_receiver():
             
             # Prova a ricevere dati
             data, _ = sock.recvfrom(1024)
-            cs = json.loads(data.decode())
-            i_real = cs[0]['data'][0]['real']
-            i_imag = cs[0]['data'][0]['imag']
-            sequence = cs[0]['sequence']
+            current_source = json.loads(data.decode())
+            i_real = current_source[0]['data'][0]['real']
+            i_imag = current_source[0]['data'][0]['imag']
+            sequence = current_source[0]['sequence']
             #print(f"Received from {HOST_DEST}: {cs}")
             
             # Imposta il flag dopo aver ricevuto il primo valore
             first_value_received = True
 
             # Esegui la simulazione con il valore ricevuto
-            v_load = start_simulation(complex(i_real, i_imag),v_prec,sequence)
+            next_simulation(sim,cs,n1,r1,complex(i_real, i_imag),sequence,time_step)
             v_prec = v_load
             
         except socket.timeout:
@@ -157,6 +167,7 @@ def setup_realtime_scheduling():
 if __name__ == "__main__":
     time_module.sleep(2)
     setup_realtime_scheduling()
-    udp_receiver()
+    sim,cs,n1,r1 = start_simulation()
+    udp_receiver(sim,cs,n1,r1)
     
     
