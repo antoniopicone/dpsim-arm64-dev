@@ -14,8 +14,8 @@ PORT_DEST = int(os.getenv('PORT_DEST', '12001'))
 PORT_SOURCE = int(os.getenv('PORT_SOURCE', '12000'))
 TIME_STEP_MILLIS = int(os.getenv('TIME_STEP_MILLIS', '1'))
 TAU_MILLIS = int(os.getenv('TAU_MILLIS', '1'))
-V_REF_VS = int(os.getenv('V_REF_VS', '10000'))
-FREQUENZA = int(os.getenv('FREQUENZA', '50'))
+V_REF_VS = float(os.getenv('V_REF_VS', '10000'))
+FREQUENZA = float(os.getenv('FREQUENZA', '50'))
 
 def start_simulation(voltage_phasor,current_step_prec,sequence):
 

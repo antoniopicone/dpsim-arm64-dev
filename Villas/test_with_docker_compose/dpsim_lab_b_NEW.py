@@ -12,7 +12,7 @@ PORT_DEST = int(os.getenv('PORT_DEST', '12002'))
 PORT_SOURCE = int(os.getenv('PORT_SOURCE', '12003'))
 TIME_STEP_MILLIS = int(os.getenv('TIME_STEP_MILLIS', '1'))
 TAU_MILLIS = int(os.getenv('TAU_MILLIS', '1'))
-FREQUENZA = int(os.getenv('FREQUENZA', '50'))
+FREQUENZA = float(os.getenv('FREQUENZA', '50'))
 
 # Tensione di bootstrap
 BOOTSTRAP_VOLTAGE_REAL = float(os.getenv('BOOTSTRAP_VOLTAGE_REAL', '0.0'))
