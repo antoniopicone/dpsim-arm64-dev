@@ -47,7 +47,7 @@ def start_simulation(current_phasor,voltage_step_prec,sequence):
     #print(f"Applying current {str(current_phasor)}")
     
     r1 = dpsimpy.dp.ph1.Resistor('r1')
-    if (sequence < 100):
+    if ((sequence < 100) or (sequence > 500) ) :
         r1.set_parameters(R=10)
     else:
         r1.set_parameters(R=1)
