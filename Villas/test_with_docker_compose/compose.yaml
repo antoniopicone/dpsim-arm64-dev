@@ -20,7 +20,7 @@ services:
       - PORT_DEST=12001
       - PORT_SOURCE=12000
       - TIME_STEP_MILLIS=1
-      - TAU_MILLIS=5
+      - TAU_MILLIS=1
       - PYTHONUNBUFFERED=1
       - V_REF_VS=10000
       - FREQUENZA=50
@@ -58,7 +58,7 @@ services:
       - PORT_DEST=12002
       - PORT_SOURCE=12003
       - TIME_STEP_MILLIS=1
-      - TAU_MILLIS=5
+      - TAU_MILLIS=1
       - PYTHONUNBUFFERED=1
       - BOOTSTRAP_VOLTAGE_REAL=0.0
       - BOOTSTRAP_VOLTAGE_IMAG=0.0

@@ -55,15 +55,14 @@ def start_simulation():
     sim.set_final_time(_time_step*1000) # eseguiamo una sola iterazione, quindi coincidente con il time step
     sim.start()
     
-    return sim, l1, n3, vload
+    return sim, l1, vload
 
-def next_simulation(sim,l1,n3,vload,voltage_phasor,sequence,time_step):
+def next_simulation(sim,l1,vload,voltage_phasor,sequence,time_step):
 
     inizio = time_module.perf_counter()
 
     #print(f"Applying voltage node n3 {str(Vn3)}")
     vload.set_parameters(V_ref=voltage_phasor)
-    n3.set_initial_voltage(voltage_phasor)
 
     sim.next()
     sequence=sequence+1
@@ -83,7 +82,7 @@ def next_simulation(sim,l1,n3,vload,voltage_phasor,sequence,time_step):
     # Invio risultato
     sock_tx = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock_tx.sendto(json.dumps(payload).encode(), (HOST_DEST, PORT_DEST))
-    #print(f"Sent current to {HOST_DEST}: {payload}")
+    print(f"Sent current to {HOST_DEST}: {payload}")
 
     fine = time_module.perf_counter()
     tempo_esecuzione = fine - inizio
@@ -92,22 +91,21 @@ def next_simulation(sim,l1,n3,vload,voltage_phasor,sequence,time_step):
         print(f"Risolto LAB A in: {str(tempo_esecuzione*1000)} msec")
         time_module.sleep((TAU_MILLIS - TIME_STEP_MILLIS)/1000)
     
-def udp_receiver(sim,l1,n3,vload):
+def udp_receiver(sim,l1,vload):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((HOST_SOURCE, PORT_SOURCE))
     sequence=0
-    time_step = TIME_STEP_MILLIS/1000
+    _time_step = TIME_STEP_MILLIS/1000
     while True:
         try:
             data, _ = sock.recvfrom(1024)
             vs = json.loads(data.decode())
-            #print(vs)
             v_real = vs[0]['data'][0]['real']
             v_imag = vs[0]['data'][0]['imag']
             sequence = vs[0]['sequence']
             
-            #print(f"Received from {HOST_DEST}: {vs}")
-            next_simulation(sim,l1,n3,vload,complex(v_real,v_imag),sequence,time_step)
+            print(f"Received from {HOST_DEST}: {vs}")
+            next_simulation(sim,l1,vload,complex(v_real,v_imag),sequence,_time_step)
 
         except (json.JSONDecodeError, KeyError, ValueError) as e:
             print(f"Errore nel parsing JSON: {str(e)}")
@@ -123,5 +121,5 @@ def setup_realtime_scheduling():
 if __name__ == "__main__":
     time_module.sleep(2)
     setup_realtime_scheduling()
-    sim, l1, n3, vload = start_simulation()
-    udp_receiver(sim, l1, n3, vload)
+    sim, l1, vload = start_simulation()
+    udp_receiver(sim, l1, vload)

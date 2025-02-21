@@ -69,18 +69,13 @@ def start_simulation():
     # Esecuzione simulazione
     sim.start()
 
-    return sim,cs,n1,r1
+    return sim,cs,n1
 
-def next_simulation(sim,cs,n1,r1,current_phasor,sequence,time_step):
+def next_simulation(sim,cs,n1,current_phasor,sequence,time_step):
     
     inizio = time_module.perf_counter()
 
     cs.set_parameters(I_ref=current_phasor)
-
-    if ((sequence < 100) or (sequence > 500) ) :
-        r1.set_parameters(R=10)
-    else:
-        r1.set_parameters(R=1)
 
     sim.next()
     sequence=sequence+1
@@ -102,7 +97,7 @@ def next_simulation(sim,cs,n1,r1,current_phasor,sequence,time_step):
     # Invio risultato
     sock_tx = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock_tx.sendto(json.dumps(payload).encode(), (HOST_DEST, PORT_DEST))
-    #print(f"Sent voltage to {HOST_DEST}: {payload}")
+    print(f"Sent voltage to {HOST_DEST}: {payload}")
 
     fine = time_module.perf_counter()
     tempo_esecuzione = fine - inizio
@@ -113,16 +108,15 @@ def next_simulation(sim,cs,n1,r1,current_phasor,sequence,time_step):
     
     return complex(real_part,imag_part)
 
-def udp_receiver(sim,cs,n1,r1):
+def udp_receiver(sim,cs,n1):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((HOST_SOURCE, PORT_SOURCE))
     _time_step = TIME_STEP_MILLIS/1000
-    __tau = TAU_MILLIS/1000
-    sock.settimeout(__tau)  # Timeout di TAU_MILLIS sec per il polling
+    _tau = TAU_MILLIS/1000
+    sock.settimeout(_tau)  # Timeout di TAU_MILLIS sec per il polling
     
     first_value_received = False
     sequence = 0
-    time_step = TIME_STEP_MILLIS/1000
     while True:
         try:
             
@@ -137,14 +131,13 @@ def udp_receiver(sim,cs,n1,r1):
             i_real = current_source[0]['data'][0]['real']
             i_imag = current_source[0]['data'][0]['imag']
             sequence = current_source[0]['sequence']
-            #print(f"Received from {HOST_DEST}: {cs}")
+            print(f"Received from {HOST_DEST}: {current_source}")
             
             # Imposta il flag dopo aver ricevuto il primo valore
             first_value_received = True
 
             # Esegui la simulazione con il valore ricevuto
-            next_simulation(sim,cs,n1,r1,complex(i_real, i_imag),sequence,time_step)
-            v_prec = v_load
+            next_simulation(sim,cs,n1,complex(i_real, i_imag),sequence,_time_step)
             
         except socket.timeout:
             # Se non abbiamo ancora ricevuto il primo valore, continua il bootstrap
@@ -167,7 +160,7 @@ def setup_realtime_scheduling():
 if __name__ == "__main__":
     time_module.sleep(2)
     setup_realtime_scheduling()
-    sim,cs,n1,r1 = start_simulation()
-    udp_receiver(sim,cs,n1,r1)
+    sim,cs,n1 = start_simulation()
+    udp_receiver(sim,cs,n1)
     
     
