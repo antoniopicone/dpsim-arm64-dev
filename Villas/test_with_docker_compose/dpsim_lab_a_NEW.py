@@ -45,12 +45,12 @@ def start_simulation(voltage_phasor,current_step_prec,sequence):
     # initialize node voltages as in simulunk
     #print("current_step_prec : ", current_step_prec)
 
-    #Vn1 = ((current_step_prec * complex(r1.R,l1.L*FREQUENZA)) + voltage_phasor)
+    #Vn1 = ((current_step_prec * complex(r1.R,l1.L*FREQUENZA*2*math.pi)) + voltage_phasor)
     Vn1 = ((current_step_prec * complex(r1.R,l1.L)) + voltage_phasor)
     #print("Applying voltage node n1 : ", Vn1)
     n1.set_initial_voltage(Vn1)
     
-    #Vn2 = (current_step_prec * complex(0,l1.L*FREQUENZA) + voltage_phasor)
+    #Vn2 = (current_step_prec * complex(0,l1.L*FREQUENZA*2*math.pi) + voltage_phasor)
     Vn2 = (current_step_prec * complex(0,l1.L) + voltage_phasor)
     #print("Applying voltage node n2 : ", Vn2)
     n2.set_initial_voltage(Vn2)
