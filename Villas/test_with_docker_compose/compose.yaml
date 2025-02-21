@@ -9,7 +9,7 @@ services:
     working_dir: /app
     container_name: dpsim_lab_a
     tty: true
-    command: /usr/bin/python3 dpsim_lab_a.py
+    command: /usr/bin/python3 dpsim_lab_a_NEW.py
     networks:
       - dpsim_network
     #depends_on:
@@ -19,9 +19,11 @@ services:
       - HOST_SOURCE=0.0.0.0
       - PORT_DEST=12001
       - PORT_SOURCE=12000
-      - TIME_STEP_MILLIS=10
-      - TAU_MILLIS=1000
+      - TIME_STEP_MILLIS=1
+      - TAU_MILLIS=5
       - PYTHONUNBUFFERED=1
+      - V_REF_VS=10000
+      - FREQUENZA=50
     
     privileged: true
     cap_add:
@@ -45,7 +47,7 @@ services:
     working_dir: /app
     container_name: dpsim_lab_b
     tty: true
-    command: /usr/bin/python3 dpsim_lab_b.py
+    command: /usr/bin/python3 dpsim_lab_b_NEW.py
     networks:
       - dpsim_network
     #depends_on:
@@ -55,11 +57,12 @@ services:
       - HOST_SOURCE=0.0.0.0
       - PORT_DEST=12002
       - PORT_SOURCE=12003
-      - TIME_STEP_MILLIS=10
-      - TAU_MILLIS=1000
+      - TIME_STEP_MILLIS=1
+      - TAU_MILLIS=5
       - PYTHONUNBUFFERED=1
-      - BOOTSTRAP_VOLTAGE_REAL=120.0
-      - BOOTSTRAP_VOLTAGE_IMAG=0
+      - BOOTSTRAP_VOLTAGE_REAL=0.0
+      - BOOTSTRAP_VOLTAGE_IMAG=0.0
+      - FREQUENZA=50
 
     privileged: true
     cap_add:
