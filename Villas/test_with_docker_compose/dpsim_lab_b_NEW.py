@@ -4,6 +4,7 @@ import math
 import os
 import time as time_module
 import dpsimpy
+import requests
 
 # Configurazione
 HOST_DEST = os.getenv('HOST_DEST', 'villas_lab_b')
@@ -17,6 +18,15 @@ FREQUENZA = float(os.getenv('FREQUENZA', '50'))
 # Tensione di bootstrap
 BOOTSTRAP_VOLTAGE_REAL = float(os.getenv('BOOTSTRAP_VOLTAGE_REAL', '0.0'))
 BOOTSTRAP_VOLTAGE_IMAG = float(os.getenv('BOOTSTRAP_VOLTAGE_IMAG', '0.0'))
+
+def get_simulation_data():
+    
+    parameters = { "id": "b9f1d4ea-e3d4-4924-9e44-59eff4fc64b6"}
+    
+    response = requests.get(url="http://api_orchestrator:8080/api/Simmulation", params=parameters)
+    response.raise_for_status()
+    data = response.json()
+    print(data)
 
 def send_bootstrap_voltage(sequence):
     payload = [{
@@ -159,6 +169,7 @@ def setup_realtime_scheduling():
 
 if __name__ == "__main__":
     time_module.sleep(2)
+    get_simulation_data()
     setup_realtime_scheduling()
     sim,cs,n1 = start_simulation()
     udp_receiver(sim,cs,n1)

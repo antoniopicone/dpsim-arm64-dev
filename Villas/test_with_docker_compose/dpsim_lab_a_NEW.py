@@ -5,6 +5,7 @@ import math
 import os
 import dpsimpy
 import time as time_module
+import requests
 
 
 # Configurazione
@@ -16,6 +17,15 @@ TIME_STEP_MILLIS = int(os.getenv('TIME_STEP_MILLIS', '1'))
 TAU_MILLIS = int(os.getenv('TAU_MILLIS', '1'))
 V_REF_VS = float(os.getenv('V_REF_VS', '10000'))
 FREQUENZA = float(os.getenv('FREQUENZA', '50'))
+
+def get_simulation_data():
+    
+    parameters = { "id": "b9f1d4ea-e3d4-4924-9e44-59eff4fc64b6"}
+    
+    response = requests.get(url="http://api_orchestrator:8080/api/Simmulation", params=parameters)
+    response.raise_for_status()
+    data = response.json()
+    print(data)
 
 def start_simulation():
 
@@ -120,6 +130,7 @@ def setup_realtime_scheduling():
 
 if __name__ == "__main__":
     time_module.sleep(2)
+    get_simulation_data()
     setup_realtime_scheduling()
     sim, l1, vload = start_simulation()
     udp_receiver(sim, l1, vload)

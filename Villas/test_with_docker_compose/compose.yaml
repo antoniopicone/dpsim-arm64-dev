@@ -1,5 +1,15 @@
 services:
 
+  api_orchestrator:
+    image: giovannibarbato/apiorchestrator-arm64-dev:1.0.0
+    working_dir: /app
+    container_name: api_orchestrator
+    tty: true
+    ports:
+      - "8080:8080"
+    networks:
+      - dpsim_network
+
 
   dpsim_lab_a:
     image: antoniopicone/dpsim-arm64-dev:1.0.3
