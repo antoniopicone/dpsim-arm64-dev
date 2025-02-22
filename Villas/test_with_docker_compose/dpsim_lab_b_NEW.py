@@ -169,7 +169,7 @@ def setup_realtime_scheduling():
 
 if __name__ == "__main__":
     time_module.sleep(2)
-    get_simulation_data()
+    #get_simulation_data()
     setup_realtime_scheduling()
     sim,cs,n1 = start_simulation()
     udp_receiver(sim,cs,n1)

@@ -25,7 +25,16 @@ def get_simulation_data():
     response = requests.get(url="http://api_orchestrator:8080/api/Simmulation", params=parameters)
     response.raise_for_status()
     data = response.json()
-    print(data)
+
+    FREQUENZA = data["simulations"][0]["frequency_band"]
+    TIME_STEP_MILLIS = int(data["simulations"][0]["time_step"])
+    TAU_MILLIS = int(data["simulations"][0]["time_period_excecution"])
+    HOST_DEST = data["simulations"][0]["endpoint_dest"]["host"]
+    HOST_SOURCE = data["simulations"][0]["endpoint_source"]["host"]
+    PORT_DEST = int(data["simulations"][0]["endpoint_dest"]["port"])
+    PORT_SOURCE = int(data["simulations"][0]["endpoint_source"]["port"])
+
+    return FREQUENZA, TIME_STEP_MILLIS, TAU_MILLIS, HOST_DEST, HOST_SOURCE, PORT_DEST, PORT_SOURCE
 
 def start_simulation():
 
@@ -37,9 +46,13 @@ def start_simulation():
     n2 =  dpsimpy.dp.SimNode('n2')
     n3 =  dpsimpy.dp.SimNode('n3')
     
+    # initialize node voltages as in simulunk
+    n2.set_initial_voltage(complex(0,0))
+    n3.set_initial_voltage(complex(0,0))
+
     # Components
     vs = dpsimpy.dp.ph1.VoltageSource('vs')
-    vs.set_parameters(V_ref=complex(V_REF_VS,0))
+    vs.set_parameters(V_ref=complex(V_REF_VS,0)* math.sqrt(2))    
     
     r1 = dpsimpy.dp.ph1.Resistor('r1')
     r1.set_parameters(R=1)
@@ -49,7 +62,6 @@ def start_simulation():
 
     vload = dpsimpy.dp.ph1.VoltageSource('vload')
     
-   
     vs.connect([gnd, n1])
     r1.connect([n1, n2])
     l1.connect([n2, n3])
@@ -130,7 +142,7 @@ def setup_realtime_scheduling():
 
 if __name__ == "__main__":
     time_module.sleep(2)
-    get_simulation_data()
+    #FREQUENZA, TIME_STEP_MILLIS, TAU_MILLIS, HOST_DEST, HOST_SOURCE, PORT_DEST, PORT_SOURCE = get_simulation_data()
     setup_realtime_scheduling()
     sim, l1, vload = start_simulation()
     udp_receiver(sim, l1, vload)
