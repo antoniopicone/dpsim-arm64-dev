@@ -12,7 +12,7 @@ ENV ASPNETCORE_ENVIRONMENT="Test"
 RUN sed -i 's/SECLEVEL=2/SECLEVEL=1/g' /etc/ssl/openssl.cnf
 #RUN apt-get -y update && apt-get install -y libxml2
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 COPY . /src
 WORKDIR /src
 COPY ["ApiProject/ApiProject.csproj", "ApiProject/"]
