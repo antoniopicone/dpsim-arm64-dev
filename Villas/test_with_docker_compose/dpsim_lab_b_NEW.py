@@ -11,7 +11,7 @@ HOST_DEST = os.getenv('HOST_DEST', 'villas_lab_b')
 HOST_SOURCE = os.getenv('HOST_SOURCE', '0.0.0.0')
 PORT_DEST = int(os.getenv('PORT_DEST', '12002'))
 PORT_SOURCE = int(os.getenv('PORT_SOURCE', '12003'))
-TIME_STEP_MILLIS = int(os.getenv('TIME_STEP_MILLIS', '1'))
+TIME_STEP_MILLIS = float(os.getenv('TIME_STEP_MILLIS', '1'))
 TAU_MILLIS = int(os.getenv('TAU_MILLIS', '1'))
 FREQUENZA = float(os.getenv('FREQUENZA', '50'))
 
@@ -73,6 +73,7 @@ def start_simulation():
     sim.set_domain(dpsimpy.Domain.DP)
     sim.set_system(system)
     _time_step = TIME_STEP_MILLIS/1000
+    print(f'LAB B TIMESTEP = {_time_step} ms')
     sim.set_time_step(_time_step)
     sim.set_final_time(_time_step*1000)
     
