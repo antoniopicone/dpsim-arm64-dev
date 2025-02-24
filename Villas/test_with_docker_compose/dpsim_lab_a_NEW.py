@@ -105,7 +105,7 @@ def next_simulation(sim,l1,vload,voltage_phasor,sequence,time_step):
     # Invio risultato
     sock_tx = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock_tx.sendto(json.dumps(payload).encode(), (HOST_DEST, PORT_DEST))
-    print(f"Sent current to {HOST_DEST}: {payload}")
+    #print(f"Sent current to {HOST_DEST}: {payload}")
 
     fine = time_module.perf_counter()
     tempo_esecuzione = fine - inizio
@@ -127,7 +127,7 @@ def udp_receiver(sim,l1,vload):
             v_imag = vs[0]['data'][0]['imag']
             sequence = vs[0]['sequence']
             
-            print(f"Received from {HOST_DEST}: {vs}")
+            #print(f"Received from {HOST_DEST}: {vs}")
             next_simulation(sim,l1,vload,complex(v_real,v_imag),sequence,_time_step)
 
         except (json.JSONDecodeError, KeyError, ValueError) as e:

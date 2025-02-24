@@ -108,7 +108,7 @@ def next_simulation(sim,cs,n1,current_phasor,sequence,time_step):
     # Invio risultato
     sock_tx = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock_tx.sendto(json.dumps(payload).encode(), (HOST_DEST, PORT_DEST))
-    print(f"Sent voltage to {HOST_DEST}: {payload}")
+    #print(f"Sent voltage to {HOST_DEST}: {payload}")
 
     fine = time_module.perf_counter()
     tempo_esecuzione = fine - inizio
@@ -142,7 +142,7 @@ def udp_receiver(sim,cs,n1):
             i_real = current_source[0]['data'][0]['real']
             i_imag = current_source[0]['data'][0]['imag']
             sequence = current_source[0]['sequence']
-            print(f"Received from {HOST_DEST}: {current_source}")
+            #print(f"Received from {HOST_DEST}: {current_source}")
             
             # Imposta il flag dopo aver ricevuto il primo valore
             first_value_received = True
