@@ -48,7 +48,7 @@ Plecs {
       Flipped       on
       Parameter {
         Variable      "V"
-        Value         "10e3*sqrt(2)"
+        Value         "10e4"
         Show          on
       }
       Parameter {
@@ -402,4 +402,4 @@ Plecs {
     }
   }
 }
-DemoSignature "lKOPSemYVspfr2fd+iMsp399RHpCCMvgwZ1KBtm+n3I="
+DemoSignature "VbExG6MI0ubLKY2Fp+JCFxMtTAouevDjn0QGBf/Gq8U="
