@@ -5,8 +5,8 @@ import math
 import os
 import dpsimpy
 import time as time_module
-import requests
-
+import requests as api_request
+import sys
 
 # Configurazione
 HOST_DEST = os.getenv('HOST_DEST', 'villas_lab_a')
@@ -14,15 +14,16 @@ HOST_SOURCE = os.getenv('HOST_SOURCE', '0.0.0.0')
 PORT_DEST = int(os.getenv('PORT_DEST', '12001'))
 PORT_SOURCE = int(os.getenv('PORT_SOURCE', '12000'))
 TIME_STEP_MILLIS = float(os.getenv('TIME_STEP_MILLIS', '1'))
-TAU_MILLIS = int(os.getenv('TAU_MILLIS', '1'))
+TAU_MILLIS = float(os.getenv('TAU_MILLIS', '1'))
 V_REF_VS = float(os.getenv('V_REF_VS', '10000'))
 FREQUENZA = float(os.getenv('FREQUENZA', '50'))
+ITERATIONS = int(float(os.getenv('TIME_STOP', '1'))*1000/(TIME_STEP_MILLIS))
 
 def get_simulation_data():
     
     parameters = { "id": "b9f1d4ea-e3d4-4924-9e44-59eff4fc64b6"}
     
-    response = requests.get(url="http://api_orchestrator:8080/api/Simmulation", params=parameters)
+    response = api_request.get(url="http://api_orchestrator:8080/api/Simmulation", params=parameters)
     response.raise_for_status()
     data = response.json()
 
@@ -128,7 +129,10 @@ def udp_receiver(sim,l1,vload):
             sequence = vs[0]['sequence']
             
             print(f"Received from {HOST_DEST}: {vs}")
-            next_simulation(sim,l1,vload,complex(v_real,v_imag),sequence,_time_step)
+            if (sequence <= ITERATIONS):
+                next_simulation(sim,l1,vload,complex(v_real,v_imag),sequence,_time_step)
+            else:
+                sys.exit()
 
         except (json.JSONDecodeError, KeyError, ValueError) as e:
             print(f"Errore nel parsing JSON: {str(e)}")

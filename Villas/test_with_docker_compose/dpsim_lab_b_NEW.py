@@ -4,7 +4,8 @@ import math
 import os
 import time as time_module
 import dpsimpy
-import requests
+import requests as api_request
+import sys
 
 # Configurazione
 HOST_DEST = os.getenv('HOST_DEST', 'villas_lab_b')
@@ -12,8 +13,9 @@ HOST_SOURCE = os.getenv('HOST_SOURCE', '0.0.0.0')
 PORT_DEST = int(os.getenv('PORT_DEST', '12002'))
 PORT_SOURCE = int(os.getenv('PORT_SOURCE', '12003'))
 TIME_STEP_MILLIS = float(os.getenv('TIME_STEP_MILLIS', '1'))
-TAU_MILLIS = int(os.getenv('TAU_MILLIS', '1'))
+TAU_MILLIS = float(os.getenv('TAU_MILLIS', '1'))
 FREQUENZA = float(os.getenv('FREQUENZA', '50'))
+ITERATIONS = int(float(os.getenv('TIME_STOP', '1'))*1000/(TIME_STEP_MILLIS))
 
 # Tensione di bootstrap
 BOOTSTRAP_VOLTAGE_REAL = float(os.getenv('BOOTSTRAP_VOLTAGE_REAL', '0.0'))
@@ -23,10 +25,19 @@ def get_simulation_data():
     
     parameters = { "id": "b9f1d4ea-e3d4-4924-9e44-59eff4fc64b6"}
     
-    response = requests.get(url="http://api_orchestrator:8080/api/Simmulation", params=parameters)
+    response = api_request.get(url="http://api_orchestrator:8080/api/Simmulation", params=parameters)
     response.raise_for_status()
     data = response.json()
-    print(data)
+
+    FREQUENZA = data["simulations"][0]["frequency_band"]
+    TIME_STEP_MILLIS = int(data["simulations"][0]["time_step"])
+    TAU_MILLIS = int(data["simulations"][0]["time_period_excecution"])
+    HOST_DEST = data["simulations"][0]["endpoint_dest"]["host"]
+    HOST_SOURCE = data["simulations"][0]["endpoint_source"]["host"]
+    PORT_DEST = int(data["simulations"][0]["endpoint_dest"]["port"])
+    PORT_SOURCE = int(data["simulations"][0]["endpoint_source"]["port"])
+
+    return FREQUENZA, TIME_STEP_MILLIS, TAU_MILLIS, HOST_DEST, HOST_SOURCE, PORT_DEST, PORT_SOURCE
 
 def send_bootstrap_voltage(sequence):
     payload = [{
@@ -148,7 +159,10 @@ def udp_receiver(sim,cs,n1):
             first_value_received = True
 
             # Esegui la simulazione con il valore ricevuto
-            next_simulation(sim,cs,n1,complex(i_real, i_imag),sequence,_time_step)
+            if (sequence <= ITERATIONS):
+                next_simulation(sim,cs,n1,complex(i_real, i_imag),sequence,_time_step)
+            else:
+                sys.exit()
             
         except socket.timeout:
             # Se non abbiamo ancora ricevuto il primo valore, continua il bootstrap
@@ -170,9 +184,7 @@ def setup_realtime_scheduling():
 
 if __name__ == "__main__":
     time_module.sleep(2)
-    #get_simulation_data()
+    #FREQUENZA, TIME_STEP_MILLIS, TAU_MILLIS, HOST_DEST, HOST_SOURCE, PORT_DEST, PORT_SOURCE = get_simulation_data()
     setup_realtime_scheduling()
     sim,cs,n1 = start_simulation()
     udp_receiver(sim,cs,n1)
-    
-    

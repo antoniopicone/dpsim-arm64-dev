@@ -1,7 +1,7 @@
 services:
 
   api_orchestrator:
-    image: giovannibarbato/apiorchestrator-arm64-dev:1.0.0
+    image: giovannisalvatore/apiorchestrator-arm64-dev:1.0.0
     working_dir: /app
     container_name: api_orchestrator
     tty: true
@@ -34,6 +34,7 @@ services:
       - PYTHONUNBUFFERED=1
       - V_REF_VS=10000
       - FREQUENZA=50
+      - TIME_STOP=0.05
     
     privileged: true
     cap_add:
@@ -73,6 +74,7 @@ services:
       - BOOTSTRAP_VOLTAGE_REAL=0.0
       - BOOTSTRAP_VOLTAGE_IMAG=0.0
       - FREQUENZA=50
+      - TIME_STOP=0.05
 
     privileged: true
     cap_add:
@@ -113,11 +115,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: 200M
+          cpus: '1'
+          memory: 512M
         reservations:
-          cpus: '0.2'
-          memory: 100M
+          cpus: '0.5'
+          memory: 256M
     networks:
       - dpsim_network
 
@@ -146,11 +148,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: 200M
+          cpus: '1'
+          memory: 512M
         reservations:
-          cpus: '0.2'
-          memory: 100M
+          cpus: '0.5'
+          memory: 256M
     networks:
       - dpsim_network
 
