@@ -141,7 +141,7 @@ def udp_receiver(sim,cs,n1):
     sequence = 0
     while True:
         try:
-            
+            sequence = sequence+1
             if not first_value_received:
                 # Invia tensione di bootstrap
                 send_bootstrap_voltage(sequence)
@@ -152,7 +152,7 @@ def udp_receiver(sim,cs,n1):
             current_source = json.loads(data.decode())
             i_real = current_source[0]['data'][0]['real']
             i_imag = current_source[0]['data'][0]['imag']
-            sequence = current_source[0]['sequence']
+            #sequence = current_source[0]['sequence']
             print(f"Received from {HOST_DEST}: {current_source}")
             
             # Imposta il flag dopo aver ricevuto il primo valore

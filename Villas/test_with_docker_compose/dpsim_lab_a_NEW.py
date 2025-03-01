@@ -126,7 +126,8 @@ def udp_receiver(sim,l1,vload):
             vs = json.loads(data.decode())
             v_real = vs[0]['data'][0]['real']
             v_imag = vs[0]['data'][0]['imag']
-            sequence = vs[0]['sequence']
+            #sequence = vs[0]['sequence']
+            sequence = sequence+1
             
             print(f"Received from {HOST_DEST}: {vs}")
             if (sequence <= ITERATIONS):
