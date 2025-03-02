@@ -17,6 +17,7 @@ TIME_STEP_MILLIS = float(os.getenv('TIME_STEP_MILLIS', '1'))
 TAU_MILLIS = float(os.getenv('TAU_MILLIS', '1'))
 V_REF_VS = float(os.getenv('V_REF_VS', '10000'))
 FREQUENZA = float(os.getenv('FREQUENZA', '50'))
+TIME_STOP = float(os.getenv('TIME_STOP', '1'))
 ITERATIONS = int(float(os.getenv('TIME_STOP', '1'))*1000/(TIME_STEP_MILLIS))
 
 def get_simulation_data():
@@ -76,7 +77,8 @@ def start_simulation():
     _time_step = TIME_STEP_MILLIS/1000
     print(f'LAB A TIMESTEP = {_time_step} ms')
     sim.set_time_step(_time_step)
-    sim.set_final_time(_time_step*1000) # eseguiamo una sola iterazione, quindi coincidente con il time step
+    _time_stop = TIME_STOP
+    sim.set_final_time(_time_stop)
     sim.start()
     
     return sim, l1, vload

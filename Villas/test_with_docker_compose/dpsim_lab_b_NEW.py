@@ -15,6 +15,7 @@ PORT_SOURCE = int(os.getenv('PORT_SOURCE', '12003'))
 TIME_STEP_MILLIS = float(os.getenv('TIME_STEP_MILLIS', '1'))
 TAU_MILLIS = float(os.getenv('TAU_MILLIS', '1'))
 FREQUENZA = float(os.getenv('FREQUENZA', '50'))
+TIME_STOP = float(os.getenv('TIME_STOP', '1'))
 ITERATIONS = int(float(os.getenv('TIME_STOP', '1'))*1000/(TIME_STEP_MILLIS))
 
 # Tensione di bootstrap
@@ -61,6 +62,7 @@ def start_simulation():
     # Nodes
     gnd = dpsimpy.dp.SimNode.gnd
     n1 = dpsimpy.dp.SimNode('n1')
+    #n2 = dpsimpy.dp.SimNode('n2')
     
     # Components
     cs = dpsimpy.dp.ph1.CurrentSource('cs')
@@ -69,14 +71,24 @@ def start_simulation():
     r1 = dpsimpy.dp.ph1.Resistor('r1')
     r1.set_parameters(R=10)
 
+    #r2 = dpsimpy.dp.ph1.Resistor('r2')
+    #r2.set_parameters(R=1)
+    
+    # Add switch
+    #sw = dpsimpy.dp.ph1.Switch('Switch')
+    #sw.set_parameters(open_resistance=1e9,closed_resistance=0.1,closed=False)
+
     # Inizializzazione tensioni dei nodi
     n1.set_initial_voltage(complex(0,0))
     
     # Connessione componenti
     cs.connect([gnd, n1])
     r1.connect([n1, gnd])
-    
+    #sw.connect([n1, n2 ])
+    #r2.connect([n2, gnd])
+
     # Setup sistema
+    #system = dpsimpy.SystemTopology(FREQUENZA, [gnd, n1, n2], [cs, r1, r2, sw])
     system = dpsimpy.SystemTopology(FREQUENZA, [gnd, n1], [cs, r1])
     
     # Setup simulazione
@@ -86,9 +98,11 @@ def start_simulation():
     _time_step = TIME_STEP_MILLIS/1000
     print(f'LAB B TIMESTEP = {_time_step} ms')
     sim.set_time_step(_time_step)
-    sim.set_final_time(_time_step*1000)
-    
+    _time_stop = TIME_STOP
+    sim.set_final_time(_time_stop)
+
     # Esecuzione simulazione
+    #sim.add_event(0.2, sw,'closed', True)
     sim.start()
 
     return sim,cs,n1
