@@ -3,7 +3,7 @@ Plecs {
   Version       "3.6"
   CircuitModel  "DiscStateSpace"
   StartTime     "0.0"
-  StopTime      "0.05"
+  StopTime      "0.5"
   Solver        "FixedStepDiscrete"
   MaxStep       "1e-4"
   InitStep      "-1"
@@ -97,7 +97,7 @@ Plecs {
       Type          Resistor
       Name          "R2"
       Show          on
-      Position      [395, 315]
+      Position      [385, 315]
       Direction     up
       Flipped       off
       Parameter {
@@ -118,7 +118,7 @@ Plecs {
       Type          Voltmeter
       Name          "Vload"
       Show          on
-      Position      [475, 315]
+      Position      [620, 310]
       Direction     up
       Flipped       off
     }
@@ -127,32 +127,33 @@ Plecs {
       Name          "Corrente"
       Show          on
       Position      [265, 240]
-      Direction     right
-      Flipped       off
+      Direction     left
+      Flipped       on
     }
     Component {
       Type          Scope
       Name          "Scope"
       Show          on
-      Position      [335, 70]
+      Position      [345, 50]
       Direction     left
       Flipped       off
       Location      [0, 67; 1512, 911]
-      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAC0AAAClvwCAAAAA/sAAAAQAFoAbwBvA"
-"G0AQQByAGUAYQAAAAAA/////wAAAIQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwIAAAKMAA"
-"ABogAAAMgAAAB4+wAAAAwAVAByAGEAYwBlAHMBAAAALQAAApYAAABmAP///wAAAAMAAAXoAAAAl/w"
-"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAABegAAABQAP///wAABTAAAAKWAAAA"
+      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAC0AAACVfwCAAAAA/sAAAAQAFoAbwBvA"
+"G0AQQByAGUAYQAAAAAA/////wAAANQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwIAAAKMAA"
+"ABogAAAMgAAAB4+wAAAAwAVAByAGEAYwBlAHMBAAAALQAAAlUAAABmAP///wAAAAMAAAXoAAAA2Pw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAABegAAABQAP///wAABTAAAAJVAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAALsAIAAAAEAAAAC"
-"QAAAGQAAAAHAAAAZAAAAAUAAABkAAAABAAAAGQAAAXoAAAACwEAAAEAAAAAAAAAAAAAAABk/////w"
-"AAAIEAAAAAAAAACAAAAGUAAAABAAAAAAAAASwAAAADAAAAAAAAAAAAAAACAAAAAAAAAGQAAAABAAA"
-"AAAAAAAAAAAABAAAAAAAAAGQAAAABAAAAAAAAAAAAAAABAAAAAAAAA48AAAABAAAAAA=="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"QAAAGQAAAAIAAAAZAAAAAcAAABkAAAABgAAAGQAAAAFAAAAZAAAAAQAAABkAAAAAwAAAGQAAAACAA"
+"AAZAAAAAEAAABkAAAF6AAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAMAAACcAAA"
+"AAQAAAAAAAAAAAAAACQAAAAAAAAVMAAAAAQAAAAA="
       PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA"
 "AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-"=="
-      Axes          "3"
+"AAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAA"
+"AAAAAAAA="
+      Axes          "5"
       TimeRange     "0.0"
       SingleTimeAxis "1"
       Open          "0"
@@ -186,11 +187,45 @@ Plecs {
         SignalTypes   [ ]
         Untangle      0
       }
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+      }
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+      }
       Fourier {
         SingleXAxis   on
         AxisLabel     "Frequency"
         Scaling       0
         PhaseDisplay  0
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+        }
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+        }
         Axis {
           Name          ""
           AutoScale     1
@@ -234,55 +269,101 @@ Plecs {
       Flipped       off
     }
     Component {
-      Type          Scope
-      Name          "Scope1"
+      Type          Resistor
+      Name          "R3"
       Show          on
-      Position      [310, 305]
+      Position      [515, 310]
       Direction     up
       Flipped       off
-      Location      [0, 66; 1512, 910]
-      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
-"G0AQQByAGUAYQAAAAAA/////wAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwIAAAF6AA"
-"ABJwAAAMgAAAB4+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAXoAAAAY/w"
-"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAABegAAABQAP///wAABegAAALKAAAA"
-"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
-"AAAAA=="
-      SavedViews    "AAAAAgAAAAEAAAAYAFMAYQB2AGUAZAAgAHYAaQBlAHcAIAAxAAAAAAAAA"
-"AA/qZmZmZmZmgAAAAEBwJ9AAAAAAABAn0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
-      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL+AMAAAAHAAAAC"
-"QAAAGQAAAAIAAAAZAAAAAcAAABkAAAABgAAAGQAAAAFAAAAZAAAAAQAAABkAAAAAwAAAGQAAAXoAA"
-"AACwEAAAEAAAAAAAAAAAAAAABk/////wAAAIEAAAAAAAAABAAAAFYAAAABAAAAAAAAAMgAAAACAAA"
-"AAAAAAAAAAAAHAAAAAAAABMoAAAABAAAAAA=="
-      PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-      Axes          "1"
-      TimeRange     "0.0"
-      SingleTimeAxis "1"
-      Open          "0"
-      Ts            "-1"
-      SampleLimit   "0"
-      XAxisLabel    ""
-      Axis {
-        Name          ""
-        AutoScale     1
-        MinValue      0
-        MaxValue      1
-        Signals       {}
-        SignalTypes   [ ]
-        Untangle      0
+      Parameter {
+        Variable      "R"
+        Value         "10"
+        Show          on
       }
-      Fourier {
-        SingleXAxis   on
-        AxisLabel     "Frequency"
-        Scaling       0
-        PhaseDisplay  0
-        Axis {
-          Name          ""
-          AutoScale     1
-          MinValue      0
-          MaxValue      1
-          Signals       {}
-          Untangle      0
-        }
+    }
+    Component {
+      Type          Switch
+      Name          "S1"
+      Show          on
+      Position      [435, 240]
+      Direction     right
+      Flipped       off
+      Parameter {
+        Variable      "s_init"
+        Value         "0"
+        Show          off
+      }
+    }
+    Component {
+      Type          Step
+      Name          "Step"
+      Show          on
+      Position      [205, 475]
+      Direction     right
+      Flipped       off
+      Parameter {
+        Variable      "Time"
+        Value         "0.1"
+        Show          on
+      }
+      Parameter {
+        Variable      "Before"
+        Value         "0"
+        Show          on
+      }
+      Parameter {
+        Variable      "After"
+        Value         "1"
+        Show          on
+      }
+    }
+    Component {
+      Type          Step
+      Name          "Step1"
+      Show          on
+      Position      [290, 535]
+      Direction     right
+      Flipped       off
+      Parameter {
+        Variable      "Time"
+        Value         "0.2"
+        Show          on
+      }
+      Parameter {
+        Variable      "Before"
+        Value         "1"
+        Show          on
+      }
+      Parameter {
+        Variable      "After"
+        Value         "0"
+        Show          on
+      }
+    }
+    Component {
+      Type          Switch
+      Name          "S2"
+      Show          on
+      Position      [495, 240]
+      Direction     right
+      Flipped       off
+      Parameter {
+        Variable      "s_init"
+        Value         "0"
+        Show          off
+      }
+    }
+    Component {
+      Type          SignalMux
+      Name          "Mux"
+      Show          off
+      Position      [555, 480]
+      Direction     right
+      Flipped       off
+      Parameter {
+        Variable      "Width"
+        Value         "2"
+        Show          off
       }
     }
     Connection {
@@ -304,7 +385,7 @@ Plecs {
       Type          Signal
       SrcComponent  "Vload"
       SrcTerminal   3
-      Points        [500, 315; 500, 110; 345, 110]
+      Points        [660, 310; 660, 110; 345, 110]
       DstComponent  "Scope"
       DstTerminal   3
     }
@@ -313,14 +394,6 @@ Plecs {
       SrcComponent  "Corrente"
       SrcTerminal   2
       DstComponent  "R1"
-      DstTerminal   1
-    }
-    Connection {
-      Type          Signal
-      SrcComponent  "Corrente"
-      SrcTerminal   3
-      Points        [265, 305]
-      DstComponent  "Scope1"
       DstTerminal   1
     }
     Connection {
@@ -359,30 +432,23 @@ Plecs {
         }
       }
       Branch {
-        Points        [395, 390]
+        Points        [385, 390]
         Branch {
-          Points        [475, 390]
-          DstComponent  "Vload"
-          DstTerminal   2
+          Points        [515, 390]
+          Branch {
+            Points        [620, 390]
+            DstComponent  "Vload"
+            DstTerminal   2
+          }
+          Branch {
+            DstComponent  "R3"
+            DstTerminal   2
+          }
         }
         Branch {
           DstComponent  "R2"
           DstTerminal   2
         }
-      }
-    }
-    Connection {
-      Type          Wire
-      SrcComponent  "Vload"
-      SrcTerminal   1
-      Points        [475, 240; 395, 240]
-      Branch {
-        DstComponent  "L1"
-        DstTerminal   1
-      }
-      Branch {
-        DstComponent  "R2"
-        DstTerminal   1
       }
     }
     Connection {
@@ -400,6 +466,83 @@ Plecs {
         DstTerminal   1
       }
     }
+    Connection {
+      Type          Wire
+      SrcComponent  "L1"
+      SrcTerminal   1
+      Points        [385, 240]
+      Branch {
+        DstComponent  "S1"
+        DstTerminal   2
+      }
+      Branch {
+        DstComponent  "R2"
+        DstTerminal   1
+      }
+      Branch {
+        Points        [385, 185; 620, 185]
+        DstComponent  "Vload"
+        DstTerminal   1
+      }
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "S1"
+      SrcTerminal   1
+      DstComponent  "S2"
+      DstTerminal   2
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "S2"
+      SrcTerminal   1
+      DstComponent  "R3"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Step"
+      SrcTerminal   1
+      Points        [435, 475]
+      Branch {
+        DstComponent  "S1"
+        DstTerminal   3
+      }
+      Branch {
+        DstComponent  "Mux"
+        DstTerminal   2
+      }
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Step1"
+      SrcTerminal   1
+      Points        [495, 535; 495, 485]
+      Branch {
+        DstComponent  "S2"
+        DstTerminal   3
+      }
+      Branch {
+        DstComponent  "Mux"
+        DstTerminal   3
+      }
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Corrente"
+      SrcTerminal   3
+      Points        [265, 135; 355, 135]
+      DstComponent  "Scope"
+      DstTerminal   4
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Mux"
+      SrcTerminal   1
+      Points        [565, 80]
+      DstComponent  "Scope"
+      DstTerminal   5
+    }
   }
 }
-DemoSignature "VbExG6MI0ubLKY2Fp+JCFxMtTAouevDjn0QGBf/Gq8U="
+DemoSignature "Pb3fkpGcfhCm4ZTsVa0SfFMVKzBq1ucaY8SG64SLG08="
