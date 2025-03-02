@@ -74,9 +74,11 @@ def start_simulation():
     sim = dpsimpy.Simulation(name)
     sim.set_domain(dpsimpy.Domain.DP)
     sim.set_system(system)
+    
     _time_step = TIME_STEP_MILLIS/1000
     print(f'LAB A TIMESTEP = {_time_step} ms')
     sim.set_time_step(_time_step)
+    
     _time_stop = TIME_STOP
     sim.set_final_time(_time_stop)
     sim.start()

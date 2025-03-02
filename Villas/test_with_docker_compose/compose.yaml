@@ -29,12 +29,12 @@ services:
       - HOST_SOURCE=0.0.0.0
       - PORT_DEST=12001
       - PORT_SOURCE=12000
-      - TIME_STEP_MILLIS=1
+      - TIME_STEP_MILLIS=0.5
       - TAU_MILLIS=1
       - PYTHONUNBUFFERED=1
       - V_REF_VS=10000
       - FREQUENZA=50
-      - TIME_STOP=0.05
+      - TIME_STOP=0.5
     
     privileged: true
     cap_add:
@@ -68,13 +68,13 @@ services:
       - HOST_SOURCE=0.0.0.0
       - PORT_DEST=12002
       - PORT_SOURCE=12003
-      - TIME_STEP_MILLIS=1
+      - TIME_STEP_MILLIS=0.5
       - TAU_MILLIS=1
       - PYTHONUNBUFFERED=1
       - BOOTSTRAP_VOLTAGE_REAL=0.0
       - BOOTSTRAP_VOLTAGE_IMAG=0.0
       - FREQUENZA=50
-      - TIME_STOP=0.05
+      - TIME_STOP=0.5
 
     privileged: true
     cap_add:
