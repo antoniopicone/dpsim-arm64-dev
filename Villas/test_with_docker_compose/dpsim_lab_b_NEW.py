@@ -78,7 +78,7 @@ def start_simulation():
     #sw = dpsimpy.dp.ph3.SeriesSwitch('StepLoad', dpsimpy.LogLevel.debug)
     #sw.set_parameters(1e9, 0.1)
     sw = dpsimpy.dp.ph1.Switch('StepLoad', dpsimpy.LogLevel.debug)
-    sw.set_parameters(1e9, 0.1, False)
+    sw.set_parameters(1e9, 0.01, False)
     sw.connect([gnd, n2])
     sw.open()
 
