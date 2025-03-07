@@ -37,7 +37,9 @@ namespace CompositionRoot
 
                 container.Register<DomainModel.Services.User.IDeleteUser,
                     Persistence.EF.PostgreSQL.Users.DeleteUser>(Lifestyle.Scoped);
-                 
+
+                container.Register<DomainModel.Services.Simulations.IGetSimmulationParams,
+                    Persistence.EF.PostgreSQL.Simulations.GetSimmulationParamsimplementation>(Lifestyle.Scoped);    
         }
     }
 }
