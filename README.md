@@ -15,23 +15,3 @@ docker build -t dpsim-arm64-dev .
 docker run -v ./:/dpsim/jupyterlab -p 8888:8888 -it dpsim-arm64-dev
 ```
 
-## DPSim and VILLASNode Simulation
-
- To start simulation with DPSim and VILLASNode:
-
-```bash
-git clone https://github.com/antoniopicone/dpsim-arm64-dev.git
-
-cd dpsim-arm64-dev
-
-docker build -t antoniopicone/dpsim-arm64-dev:1.0.3 .
-
-cd APIsOrchestrator
-
-docker build -t giovannibarbato/apiorchestrator-arm64-dev:1.0.0 .
-
-cd ../Villas/test_with_docker_compose
-
-docker compose up
-```
-![alt text](simulation.png)
